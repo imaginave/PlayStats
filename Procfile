@@ -1,0 +1,1 @@
+web: gunicorn PokerStats.wsgi --log-file -
