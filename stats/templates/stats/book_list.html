@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+
+
+{% block content %}
+<div style="background-color: white; color:#332f2c;">
+    {% for table in tables %}
+        {% render_table table %}
+    {% endfor %}
+</div>
+{% endblock content %}

@@ -1,0 +1,18 @@
+tr[header][display="hide"] .sign:after{
+
+	content:"+";
+	display:inline-block;  
+
+}
+
+tr[header][display="show"] .sign:after{
+	content:"-";
+
+}
+
+tfoot{ font-weight: bold;  }
+
+.header .sign:after{
+  content:"+";
+  display:inline-block;      
+}

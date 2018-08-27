@@ -12,24 +12,16 @@ Class-based views
     2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
 Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-"""
-from django.conf.urls import url
-from django.contrib import admin
+    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls')) """
 
-from django.conf.urls import url
 
+from django.contrib.auth.decorators import login_required
+from django.conf.urls import url
 from . import views
 
-from django.conf.urls import url
-
-from . import views
-from django.conf.urls import url
-
-from . import views
 
 app_name = 'stats'
 urlpatterns = [
-    url(r'transactions/$', views.transactions, name='transactions'),
-    url(r'upload/$', views.simple_upload, name='upload')
+    url(r'transactions/$', login_required(views.TransactionsList.as_view()), name='transactions_table')
 ]
+

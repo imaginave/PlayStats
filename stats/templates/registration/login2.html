@@ -1,0 +1,50 @@
+<!-- login modal -->       
+{% extends 'base.html' %}
+{% block content %}
+
+		 <div id="loginModal"  aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="text-center" style="color:#332f2c;" >Login</h1>
+                </div>
+                <div class="modal-body">
+                    <form class="form col-md-12 center-block "method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                        <div class="form-group">
+                            {% if form.errors %}
+                            <p>Your username and password didn't match. Please try again.</p>
+                            {% endif %}
+                            
+                            {% if next %}
+                                {% if user.is_authenticated %}
+                                <p>Your account doesn't have access to this page. To proceed,
+                                please login with an account that has access.</p>
+                                {% else %}
+                                <p>Please login to see this page.</p>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    	<div class="form-group col-md-12 center-block" style="color:#332f2c;">
+                    		<td >{{ form.username.label_tag }}</td>
+  							<td >{{ form.username }}</td>
+                    	</div>
+                    	<div class="form-group col-md-12 center-block" style="color:#332f2c;">
+                    		<td>{{ form.password.label_tag }}&nbsp</td>
+							<td>{{ form.password }}</td>
+                    	</div>
+                    	<div class="form-group">
+                    		<button class="btn btn-primary btn-lg btn-block" type="submit" value="login">Submit</button>
+                    		<input type="hidden" name="next" value="{{ next }}" />
+                    	</div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-12">
+
+                    </div>    
+                </div>
+            </div>
+            </div>
+        </div>
+{% endblock %}

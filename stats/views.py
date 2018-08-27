@@ -1,32 +1,46 @@
 # Create your views here.
 
-from django.shortcuts import  render
-from .models import Transations
+#from django.shortcuts import render
+from django.http import HttpResponse
+from .models import Transactions, News
 from .tables import TransactionsTable
-from django_tables2 import RequestConfig
-from django.contrib.auth.decorators import login_required
-from tablib import Dataset
+from .forms import TransactionsListFormHelper
+from .utils import PagedFilteredTableView
+from .filters import TransactionsListFilter
 from .resources import TransactionResource
+from django_tables2 import RequestConfig
+from tablib import Dataset
+from django.contrib.auth.models import User
+from django_tables2 import MultiTableMixin
+from django.views.generic.base import TemplateView
+
+class TransactionsList(PagedFilteredTableView):
+    model = Transactions
+    table_class = TransactionsTable
+    table_pagination = False
+    filter_class = TransactionsListFilter
+    formhelper_class = TransactionsListFormHelper
+    template_name = 'stats/transactions_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(TransactionsList, self).get_context_data(**kwargs)
+        print(context['table'])
+        context['news'] = News.objects.all()
+        return context
+
+    def post(self, *args, **kwargs ):
+        if 'export_transactions' in self.request.POST:
+            dataset = TransactionResource().export(self.get_queryset())
+            response = HttpResponse(dataset.csv, content_type="csv")
+            response['Content-Disposition'] = 'attachment; filename=filename.csv'
+            return response
 
 
+'''class TransactionsExport(View):
 
-@login_required
-def transactions(request):
-    table = TransactionsTable(Transations.objects.filter(Nickname = request.user))
-    RequestConfig(request).configure(table)
-    return render(request, 'stats/transactions.html', {'transations': table})
+    def get(self, *args, **kwargs ):
+        dataset = TransactionResource().export()
+        response = HttpResponse(dataset.csv, content_type="csv")
+        response['Content-Disposition'] = 'attachment; filename=filename.csv'
+        return response'''
 
-@login_required
-def simple_upload(request):
-    if request.method == 'POST':
-        transaction_resource = TransactionResource()
-        dataset = Dataset()
-        new_persons = request.FILES['myfile']
-
-        imported_data = dataset.load(new_persons.read())
-        result = transaction_resource.import_data(dataset, dry_run=True)  # Test the data import
-        print(imported_data)
-        if not result.has_errors():
-            transaction_resource.import_data(dataset, dry_run=False)  # Actually import now
-
-    return render(request, 'stats/import.html')
