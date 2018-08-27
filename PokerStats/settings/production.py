@@ -30,7 +30,7 @@ ALLOWED_HOSTS =  ['dj-players-stats.herokuapp.com','www.accountreport.net', 'acc
 
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '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'
+EMAIL_HOST_PASSWORD = '##########'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'account-report-admin <lofaso@ya.ru>'
